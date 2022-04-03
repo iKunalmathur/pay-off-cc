@@ -1,0 +1,62 @@
+[
+  {
+    "last4": "8653",
+    "billGenerateMonthlyOn": "15",
+    "dueDateOffset": "20",
+    "billDate": "",
+    "billDateStatus": "",
+    "nextBillDate": "",
+    "dueDate": "",
+    "dueDateStatus": "",
+    "coolDownDays": "",
+    "monthlyLimit": "111"
+  },
+  {
+    "last4": "3695",
+    "billGenerateMonthlyOn": "11",
+    "dueDateOffset": "10",
+    "billDate": "",
+    "billDateStatus": "",
+    "nextBillDate": "",
+    "dueDate": "",
+    "dueDateStatus": "",
+    "coolDownDays": "",
+    "monthlyLimit": "222"
+  },
+  {
+    "last4": "1258",
+    "billGenerateMonthlyOn": "01",
+    "dueDateOffset": "01",
+    "billDate": "",
+    "billDateStatus": "",
+    "nextBillDate": "",
+    "dueDate": "",
+    "dueDateStatus": "",
+    "coolDownDays": "",
+    "monthlyLimit": "333"
+  },
+  {
+    "last4": "4789",
+    "billGenerateMonthlyOn": "09",
+    "dueDateOffset": "09",
+    "billDate": "",
+    "billDateStatus": "",
+    "nextBillDate": "",
+    "dueDate": "",
+    "dueDateStatus": "",
+    "coolDownDays": "",
+    "monthlyLimit": "444"
+  },
+  {
+    "last4": "2254",
+    "billGenerateMonthlyOn": "01",
+    "dueDateOffset": "10",
+    "billDate": "",
+    "billDateStatus": "",
+    "nextBillDate": "",
+    "dueDate": "",
+    "dueDateStatus": "",
+    "coolDownDays": "",
+    "monthlyLimit": "555"
+  }
+]
