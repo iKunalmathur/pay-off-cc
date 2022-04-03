@@ -87,7 +87,6 @@ export default function Home() {
 
   useEffect(() => {
     setDueDate();
-    // applyFilter(sortBy, sortOrder);
   }, []);
 
   return (
@@ -115,9 +114,9 @@ export default function Home() {
               <select
                 name="sortOrder"
                 className="bg-[#151515] shadow-lg rounded-lg py-3 px-4 border-none capitalize text-sm font-semibold"
-                onChange={(e) => {
-                  setSortOrder(e.target.value);
-                  applyFilter(cards, sortBy, e.target.value);
+                onChange={(evt) => {
+                  setSortOrder(evt.target.value);
+                  applyFilter(cards, sortBy, evt.target.value);
                 }}
                 value={sortOrder}
               >
@@ -127,9 +126,9 @@ export default function Home() {
               <select
                 name="sortBy"
                 className="bg-[#151515] shadow-lg rounded-lg py-3 px-4 border-none capitalize text-sm font-semibold"
-                onChange={(e) => {
-                  setSortBy(e.target.value);
-                  applyFilter(cards, e.target.value, sortOrder);
+                onChange={(evt) => {
+                  setSortBy(evt.target.value);
+                  applyFilter(cards, evt.target.value, sortOrder);
                 }}
               >
                 <option value="coolDownDays">Cool Down</option>
