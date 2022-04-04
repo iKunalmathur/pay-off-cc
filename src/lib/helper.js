@@ -13,6 +13,9 @@ export function isObjEmpty(object) {
 }
 
 export const localStorageData = () => {
-  const { cards } = JSON.parse(localStorage.getItem(envVar.appName)) ?? [];
-  return { cards };
+  const data = JSON.parse(localStorage.getItem(envVar.appName));
+  if (data?.cards.length > 0) {
+    return { cards: data?.cards };
+  }
+  return { cards: [] };
 };

@@ -1,68 +1,29 @@
+import AppLayout from "../components/AppLayout";
 import { useState, useEffect } from "react";
-import { dateDiffInDays } from "@/lib/datefun";
-import AppLayout from "@/components/AppLayout";
-import { localStorageData } from "@/lib/helper";
-import Card from "@/components/Card";
-import envVar from "@/lib/envVar";
+import Card from "../components/Card";
+import { localStorageData } from "../lib/helper";
+import envVar from "../lib/envVar";
+import { dateDiffInDays } from "../lib/datefun";
 
 export default function Home() {
   const [cards, setCards] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [sortOrder, setSortOrder] = useState("desc");
   const [sortBy, setSortBy] = useState("coolDownDays");
 
-  const setDueDate = () => {
-    const today = new Date();
-
-    const { cards } = localStorageData() ?? [];
-    // const cards = cardsData;
-
-    cards?.map((card) => {
-      // set due date
-      card["dueDate"] = new Date(
-        today.getFullYear(),
-        today.getMonth(),
-        parseInt(card.billGenerateMonthlyOn) + parseInt(card.dueDateOffset)
-      ).toDateString();
-      //set due date status
-      card["dueDateStatus"] =
-        dateDiffInDays(today, new Date(card.dueDate)) <= 0 ? "overdue" : "due";
-
-      // set billing date
-      card["billDate"] = new Date(
-        today.getFullYear(),
-        today.getMonth(),
-        parseInt(card.billGenerateMonthlyOn)
-      ).toDateString();
-
-      // set bill date status
-      card["billDateStatus"] =
-        dateDiffInDays(today, new Date(card.billDate)) < 0
-          ? "generated"
-          : "not-generated";
-
-      // next bill date
-      card["nextBillDate"] = new Date(
-        today.getFullYear(),
-        today.getMonth() + 1,
-        parseInt(card.billGenerateMonthlyOn)
-      ).toDateString();
-
-      // set cool down days
-      if (card.billDateStatus == "generated") {
-        card["coolDownDays"] = dateDiffInDays(
-          today,
-          new Date(card.nextBillDate)
-        );
-      } else {
-        card["coolDownDays"] = dateDiffInDays(today, new Date(card.billDate));
-      }
-
-      return card;
-    });
-    applyFilter(cards, sortBy, sortOrder);
+  // Delete card from local storage
+  const deleteCard = (id) => {
+    // console.log(
+    //   `%c Card with id ${id} deleted !`,
+    //   "background: #962d2d; color: #ffffff"
+    // );
+    const newCards = cards.filter((card) => card.id !== id);
+    localStorage.setItem(envVar.appName, JSON.stringify({ cards: newCards }));
+    setCards(newCards);
   };
 
-  const applyFilter = (cards, sortBy, order = "asc") => {
+  // Sort cards
+  const applySort = (cards, sortBy, order) => {
     const sortedCards = cards.sort((a, b) => {
       let comparison = 0;
       if (a[sortBy] < b[sortBy]) {
@@ -77,16 +38,62 @@ export default function Home() {
     setCards(sortedCards);
   };
 
-  const deleteCard = (id) => {
-    // delete card from local storage
-    const { cards } = localStorageData() ?? [];
-    const newCards = cards.filter((card) => card.id != id);
-    localStorage.setItem(envVar.appName, JSON.stringify({ cards: newCards }));
-    setDueDate();
+  // Fetch cards from local storage
+  const getCards = () => {
+    const { cards } = localStorageData();
+    cards.map((card) => {
+      return setCardDetails(card);
+    });
+    applySort(cards, sortBy, sortOrder);
+    setIsLoading(false);
+  };
+
+  // Set card details
+  const setCardDetails = (card) => {
+    const today = new Date();
+    // set due date
+    card["dueDate"] = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      parseInt(card.dueDateOffset)
+    ).toDateString();
+    // parseInt(card.billGenerateMonthlyOn) + parseInt(card.dueDateOffset)
+    //set due date status
+    card["dueDateStatus"] =
+      dateDiffInDays(today, new Date(card.dueDate)) <= 0 ? "overdue" : "due";
+
+    // set billing date
+    card["billDate"] = new Date(
+      today.getFullYear(),
+      today.getMonth(),
+      parseInt(card.billGenerateMonthlyOn)
+    ).toDateString();
+
+    // set bill date status
+    card["billDateStatus"] =
+      dateDiffInDays(today, new Date(card.billDate)) < 0
+        ? "generated"
+        : "not-generated";
+
+    // next bill date
+    card["nextBillDate"] = new Date(
+      today.getFullYear(),
+      today.getMonth() + 1,
+      parseInt(card.billGenerateMonthlyOn)
+    ).toDateString();
+
+    // set cool down days
+    if (card.billDateStatus == "generated") {
+      card["coolDownDays"] = dateDiffInDays(today, new Date(card.nextBillDate));
+    } else {
+      card["coolDownDays"] = dateDiffInDays(today, new Date(card.billDate));
+    }
+
+    return card;
   };
 
   useEffect(() => {
-    setDueDate();
+    getCards();
   }, []);
 
   return (
@@ -116,7 +123,7 @@ export default function Home() {
                 className="bg-[#151515] shadow-lg rounded-lg py-3 px-4 border-none capitalize text-sm font-semibold"
                 onChange={(evt) => {
                   setSortOrder(evt.target.value);
-                  applyFilter(cards, sortBy, evt.target.value);
+                  applySort(cards, sortBy, evt.target.value);
                 }}
                 value={sortOrder}
               >
@@ -128,7 +135,7 @@ export default function Home() {
                 className="bg-[#151515] shadow-lg rounded-lg py-3 px-4 border-none capitalize text-sm font-semibold"
                 onChange={(evt) => {
                   setSortBy(evt.target.value);
-                  applyFilter(cards, evt.target.value, sortOrder);
+                  applySort(cards, evt.target.value, sortOrder);
                 }}
               >
                 <option value="coolDownDays">Cool Down</option>
@@ -140,7 +147,15 @@ export default function Home() {
           <div className="space-y-8 overflow-auto h-[50vh]">
             {/* {console.clear()} */}
 
-            {cards.length > 0 ? (
+            {isLoading ? (
+              <div className="bg-[#151515] shadow-lg rounded-lg p-6 grid grid-cols-3 gap-4 first:border first:border-gray-500">
+                <div className="col-span-2">
+                  <p className="text-lg font-semibold  text-gray-500">
+                    Loading...
+                  </p>
+                </div>
+              </div>
+            ) : cards.length > 0 ? (
               cards.map((card, index) => (
                 <Card card={card} key={index} deleteCard={deleteCard} />
               ))

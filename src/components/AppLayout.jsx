@@ -1,5 +1,6 @@
 import Link from "next/link";
 import React from "react";
+import envVar from "../lib/envVar";
 
 const AppLayout = ({ children }) => {
   return (
@@ -9,7 +10,9 @@ const AppLayout = ({ children }) => {
           <div>
             <Link href={"/"}>
               <a>
-                <h1 className="text-3xl font-bold italic">Pay-Off-CC</h1>
+                <h1 className="text-3xl font-bold italic capitalize">
+                  {envVar.appName ?? "Pay-Off-CC"}
+                </h1>
               </a>
             </Link>
           </div>

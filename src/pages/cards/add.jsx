@@ -1,8 +1,8 @@
-import AppLayout from "@/components/AppLayout";
-import envVar from "@/lib/envVar";
-import { isObjEmpty, localStorageData } from "@/lib/helper";
 import { useRouter } from "next/router";
 import React from "react";
+import AppLayout from "../../components/AppLayout";
+import envVar from "../../lib/envVar";
+import { isObjEmpty, localStorageData } from "../../lib/helper";
 
 const Add = () => {
   const router = useRouter();
@@ -17,7 +17,8 @@ const Add = () => {
       alert("Please fill all the fields");
       return;
     }
-    const { cards } = localStorageData() ?? {};
+    const { cards } = localStorageData();
+
     if (cards) {
       const newCards = [...cards, formData];
       localStorage.setItem(envVar.appName, JSON.stringify({ cards: newCards }));

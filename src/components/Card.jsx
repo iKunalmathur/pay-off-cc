@@ -28,10 +28,8 @@ const Card = ({ card, deleteCard }) => {
       </div>
       <div className="flex justify-between items-center">
         <p className="text-lg font-semibold">{`XXXX  XXXX  XXXX  ${card.last4digits}`}</p>
-        <p>
-          <p className="text-4xl font-semibold text-gray-600 group-hover:text-gray-400 transition-colors duration-200">
-            {card.coolDownDays}
-          </p>
+        <p className="text-4xl font-semibold text-gray-600 group-hover:text-gray-400 transition-colors duration-200">
+          {card.coolDownDays}
         </p>
       </div>
       <div className="flex gap-4">
