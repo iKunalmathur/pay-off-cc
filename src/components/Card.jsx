@@ -4,6 +4,7 @@ const Card = ({ card, deleteCard }) => {
   return (
     <div className="relative group bg-[#181818] shadow-lg rounded-lg p-6 flex flex-col gap-6 border border-gray-600 first:border-primary-500">
       <button
+        aria-label="delete card"
         className="absolute top-3 right-3 text-gray-700 hover:text-red-500 transition-colors duration-200"
         onClick={() => deleteCard(card.id)}
       >

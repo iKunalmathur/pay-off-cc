@@ -20,7 +20,10 @@ const AppLayout = ({ children }) => {
             <ul className="flex gap-6 items-center">
               <li>
                 <Link href={"/cards/add"}>
-                  <a className="flex items-center text-primary-500">
+                  <a
+                    className="flex items-center text-primary-500"
+                    aria-label="add card"
+                  >
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       className="h-5 w-5"
